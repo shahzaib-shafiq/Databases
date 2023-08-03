@@ -1,15 +1,22 @@
 const express = require("express");
+const connectDB = require("./db");
+const authRouter = require("./Routes/auth");
 
-const connectToMongo = require('./db');
+const PORT = 3000;
+const app = express(); 
+app.use(express.json());
 
-connectToMongo();
-const app = express();
+(async () => {
+  const app = await connectDB();
 
-const port = 3001;
+  app.get("/", (req, res) => {
+    res.send("Fetching Data From  API");
+  });
 
-app.use('/api/auth',require('./Routes/auth'));
-app.use('/api/notes',require('./Routes/notes'));
+  
+  app.use('/api/auth', authRouter);
 
-app.listen(port, () => {
-    console.log(`Connected on : ${port}`);
-});
+  app.listen(PORT, () => {
+    console.log(`Server Working on Port:${PORT}`);
+  });
+})();
