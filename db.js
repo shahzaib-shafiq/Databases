@@ -1,27 +1,17 @@
 const mongoose = require("mongoose");
 
-const express = require("express");
-
-
-
-const app = express();
-
-
-app.use(express.json());
-
-const URL = 'mongodb://127.0.0.1:27017/LearningMongo';
-
-
-const connectDB = async () => {
+async function connectDB() {
   try {
-    await mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log('Connected');
+    await mongoose.connect("mongodb://localhost:27017/your-database-name", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB connected successfully.");
+    return mongoose.connection;
   } catch (error) {
-    console.error('Error Not Connected:', error);
-    process.exit(0); 
+    console.error("MongoDB connection error:", error);
+    process.exit(1); // Exit the process if the connection fails
   }
-  
-  return app;
-};
+}
 
-module.exports = connectDB; 
+module.exports = connectDB;
