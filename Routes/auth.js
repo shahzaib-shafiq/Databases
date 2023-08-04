@@ -3,6 +3,8 @@ const User = require("../Models/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+const JWT_SECRET='Harryisagoodb$oy'
 
 router.post("/createuser", [
   body('email').isEmail().withMessage('Enter Email'),
@@ -31,7 +33,16 @@ router.post("/createuser", [
       password: secPass,
     });
 
-    res.json(user);
+    const data={
+      id:user.id
+    }
+
+    
+    const authtoken=jwt.sign(data,JWT_SECRET);
+    // console.log(jwtData)
+   
+    // res.json(user);
+    res.json({authtoken});
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "An error occurred while creating the user" });
